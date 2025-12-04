@@ -8,3 +8,7 @@ This is a test feature to demonstrate Crystal Ball CI/CD system.
 
 ## Notes
 This PR will trigger AI analysis!
+
+
+## Update
+Backend fixed - follow_redirects enabled!
