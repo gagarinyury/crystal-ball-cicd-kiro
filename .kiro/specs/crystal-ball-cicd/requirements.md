@@ -16,6 +16,10 @@ Crystal Ball CI/CD is an AI-powered continuous integration and deployment monito
 - **WebSocket Server**: The real-time communication channel between backend and frontend
 - **PR Diff**: The code changes in a GitHub pull request
 - **Historical Data**: Past predictions and their actual outcomes used for accuracy tracking
+- **Persistent Storage**: Database system for storing predictions and historical data across restarts
+- **Rate Limiter**: Component that controls the frequency of webhook requests to prevent abuse
+- **Configuration Service**: Component that manages environment-specific settings
+- **Health Check**: Endpoint that verifies system components are functioning correctly
 
 ## Requirements
 
@@ -153,3 +157,63 @@ Crystal Ball CI/CD is an AI-powered continuous integration and deployment monito
 3. WHEN the AI Analyzer receives LLM response THEN the AI Analyzer SHALL parse the JSON and validate the response schema
 4. WHEN the LLM response is malformed or missing required fields THEN the AI Analyzer SHALL return a fallback prediction
 5. WHEN serializing prediction data for WebSocket THEN the Crystal Ball System SHALL ensure the data is valid JSON before sending
+
+### Requirement 12
+
+**User Story:** As a system administrator, I want the WebSocket URL to be configurable via environment variables, so that the frontend can connect to different backend environments without code changes.
+
+#### Acceptance Criteria
+
+1. WHEN the Dashboard initializes THEN the Dashboard SHALL read the WebSocket URL from environment variable VITE_WS_URL
+2. WHEN VITE_WS_URL is not set THEN the Dashboard SHALL use a default localhost URL for development
+3. WHEN the WebSocket URL is loaded THEN the Dashboard SHALL not hardcode IP addresses in the source code
+4. WHEN deploying to different environments THEN the Dashboard SHALL connect to the correct backend without rebuilding
+
+### Requirement 13
+
+**User Story:** As a system administrator, I want persistent storage for predictions and historical data, so that the system retains information across restarts.
+
+#### Acceptance Criteria
+
+1. WHEN the Crystal Ball System starts THEN the Persistent Storage SHALL connect to PostgreSQL database using connection string from environment
+2. WHEN a prediction is made THEN the Persistent Storage SHALL save the prediction to the database with all fields
+3. WHEN the Crystal Ball System restarts THEN the Persistent Storage SHALL load historical predictions from the database
+4. WHEN querying historical data THEN the Persistent Storage SHALL retrieve predictions ordered by timestamp descending
+5. WHEN the database connection fails THEN the Persistent Storage SHALL log the error and attempt reconnection with exponential backoff
+
+### Requirement 14
+
+**User Story:** As a system administrator, I want rate limiting on the webhook endpoint, so that the system is protected from spam and abuse.
+
+#### Acceptance Criteria
+
+1. WHEN the webhook endpoint receives requests THEN the Rate Limiter SHALL track request count per IP address within a sliding time window
+2. WHEN an IP address exceeds 10 requests per minute THEN the Rate Limiter SHALL reject subsequent requests with 429 status
+3. WHEN the rate limit window expires THEN the Rate Limiter SHALL reset the counter for that IP address
+4. WHEN a request is rate limited THEN the Rate Limiter SHALL include Retry-After header in the response
+5. WHEN rate limiting occurs THEN the Rate Limiter SHALL log the event with IP address and timestamp
+
+### Requirement 15
+
+**User Story:** As a developer, I want improved diff parsing that handles renamed and binary files, so that predictions are more accurate.
+
+#### Acceptance Criteria
+
+1. WHEN the PR diff contains renamed files THEN the Crystal Ball System SHALL detect the rename operation and count it as one file changed
+2. WHEN the PR diff contains binary files THEN the Crystal Ball System SHALL identify them and exclude from line count calculations
+3. WHEN extracting diff statistics THEN the Crystal Ball System SHALL provide accurate counts for files_changed, lines_added, lines_removed, files_renamed, and binary_files
+4. WHEN a file is both renamed and modified THEN the Crystal Ball System SHALL count both the rename and the modifications
+5. WHEN parsing complex diffs THEN the Crystal Ball System SHALL handle edge cases without crashing
+
+### Requirement 16
+
+**User Story:** As a system administrator, I want comprehensive health checks for all system components, so that I can monitor system status and diagnose issues quickly.
+
+#### Acceptance Criteria
+
+1. WHEN the health endpoint is queried THEN the Crystal Ball System SHALL check database connectivity and return connection status
+2. WHEN the health endpoint is queried THEN the Crystal Ball System SHALL check WebSocket server status and return active connection count
+3. WHEN the health endpoint is queried THEN the Crystal Ball System SHALL verify GitHub API accessibility and return rate limit status
+4. WHEN the health endpoint is queried THEN the Crystal Ball System SHALL verify LLM API accessibility and return service status
+5. WHEN any component is unhealthy THEN the Crystal Ball System SHALL return 503 status with details of failing components
+6. WHEN all components are healthy THEN the Crystal Ball System SHALL return 200 status with component details

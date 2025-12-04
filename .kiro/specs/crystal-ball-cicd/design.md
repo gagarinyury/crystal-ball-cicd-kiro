@@ -2,13 +2,14 @@
 
 ## Overview
 
-Crystal Ball CI/CD is a real-time AI-powered monitoring system that predicts deployment success for GitHub pull requests. The system consists of three main layers:
+Crystal Ball CI/CD is a real-time AI-powered monitoring system that predicts deployment success for GitHub pull requests. The system consists of four main layers:
 
-1. **Backend (Python FastAPI)**: Handles GitHub webhooks, orchestrates AI analysis, manages WebSocket connections, and maintains historical prediction data
+1. **Backend (Python FastAPI)**: Handles GitHub webhooks, orchestrates AI analysis, manages WebSocket connections, and provides rate limiting
 2. **AI Analysis Layer**: Uses Anthropic Claude API to analyze code diffs and generate predictions with mystical-themed messaging
-3. **Frontend (React + Vite)**: Provides an engaging mystical dashboard with real-time updates via WebSocket
+3. **Persistent Storage Layer (PostgreSQL)**: Stores predictions and historical data for long-term analysis and system resilience
+4. **Frontend (React + Vite)**: Provides an engaging mystical dashboard with real-time updates via WebSocket and configurable backend connection
 
-The system operates entirely locally on macOS for MVP, using ngrok to expose the webhook endpoint to GitHub. All data is stored in-memory for simplicity.
+The system is designed for production deployment with persistent storage, rate limiting, improved diff parsing, comprehensive health checks, and environment-based configuration.
 
 ## Architecture
 
@@ -94,6 +95,8 @@ The system operates entirely locally on macOS for MVP, using ngrok to expose the
 - anthropic (Claude API client)
 - python-dotenv (environment configuration)
 - WebSockets (built into FastAPI)
+- asyncpg (async PostgreSQL driver)
+- slowapi (rate limiting middleware)
 
 **Frontend:**
 - React 18
@@ -101,10 +104,14 @@ The system operates entirely locally on macOS for MVP, using ngrok to expose the
 - Native WebSocket API
 - CSS3 animations
 
+**Database:**
+- PostgreSQL 14+ (persistent storage)
+
 **Infrastructure:**
 - Python 3.11+
 - Node.js 18+
-- ngrok (webhook tunneling)
+- PostgreSQL 14+
+- ngrok (webhook tunneling for development)
 
 ## Components and Interfaces
 
@@ -255,7 +262,124 @@ class WebSocketManager:
         """Return number of active connections"""
 ```
 
-#### 5. Main Application (`main.py`)
+#### 5. Database Service (`database.py`)
+
+**Responsibilities:**
+- Manage PostgreSQL connection pool
+- Store and retrieve predictions
+- Load historical data on startup
+- Handle database migrations
+- Implement retry logic for connection failures
+
+**Interface:**
+```python
+class DatabaseService:
+    def __init__(self, connection_string: str):
+        """Initialize connection pool"""
+        
+    async def connect(self) -> None:
+        """Establish database connection with retry logic"""
+        
+    async def disconnect(self) -> None:
+        """Close database connection pool"""
+        
+    async def save_prediction(self, prediction: dict) -> str:
+        """
+        Save prediction to database
+        Returns: prediction_id (UUID)
+        """
+        
+    async def get_predictions(self, limit: int = 100) -> List[dict]:
+        """Retrieve recent predictions ordered by timestamp"""
+        
+    async def update_outcome(self, prediction_id: str, actual_result: bool) -> None:
+        """Update prediction with actual deployment outcome"""
+        
+    async def get_accuracy_metrics(self) -> dict:
+        """
+        Calculate accuracy metrics from database
+        Returns: {
+            'total_predictions': int,
+            'predictions_with_outcomes': int,
+            'accurate_predictions': int,
+            'accuracy_rate': float
+        }
+        """
+        
+    async def health_check(self) -> bool:
+        """Verify database connectivity"""
+```
+
+#### 6. Rate Limiter (`rate_limiter.py`)
+
+**Responsibilities:**
+- Track request counts per IP address
+- Implement sliding window rate limiting
+- Reject requests exceeding limits
+- Provide rate limit headers in responses
+
+**Interface:**
+```python
+class RateLimiter:
+    def __init__(self, requests_per_minute: int = 10):
+        """Initialize with rate limit threshold"""
+        
+    async def check_rate_limit(self, ip_address: str) -> tuple[bool, Optional[int]]:
+        """
+        Check if IP is within rate limit
+        Returns: (is_allowed, retry_after_seconds)
+        """
+        
+    async def record_request(self, ip_address: str) -> None:
+        """Record request for IP address"""
+        
+    async def cleanup_expired(self) -> None:
+        """Remove expired entries from tracking"""
+```
+
+#### 7. Configuration Service (`config.py`)
+
+**Responsibilities:**
+- Load and validate environment variables
+- Provide typed configuration access
+- Handle environment-specific settings
+- Validate required configuration on startup
+
+**Interface:**
+```python
+class Config:
+    def __init__(self):
+        """Load and validate configuration from environment"""
+        
+    @property
+    def github_token(self) -> str:
+        """GitHub API token"""
+        
+    @property
+    def anthropic_api_key(self) -> str:
+        """Anthropic API key"""
+        
+    @property
+    def webhook_secret(self) -> str:
+        """GitHub webhook secret"""
+        
+    @property
+    def database_url(self) -> str:
+        """PostgreSQL connection string"""
+        
+    @property
+    def frontend_url(self) -> str:
+        """Frontend URL for CORS"""
+        
+    @property
+    def rate_limit_per_minute(self) -> int:
+        """Rate limit threshold"""
+        
+    def validate(self) -> None:
+        """Validate all required config is present"""
+```
+
+#### 8. Main Application (`main.py`)
 
 **Responsibilities:**
 - Initialize FastAPI app
@@ -263,10 +387,11 @@ class WebSocketManager:
 - Wire up all components
 - Define HTTP and WebSocket endpoints
 - Handle application lifecycle
+- Apply rate limiting middleware
 
 **Endpoints:**
-- `POST /webhook/github` - Receive GitHub webhooks
-- `GET /health` - Health check with metrics
+- `POST /webhook/github` - Receive GitHub webhooks (rate limited)
+- `GET /health` - Comprehensive health check with component status
 - `WS /ws` - WebSocket connection for real-time updates
 
 ### Frontend Components
@@ -357,6 +482,53 @@ function useWebSocket(url) {
 
 ## Data Models
 
+### Database Schema
+
+**predictions table:**
+```sql
+CREATE TABLE predictions (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    pr_url TEXT NOT NULL,
+    pr_number INTEGER NOT NULL,
+    repo TEXT NOT NULL,
+    prediction_score INTEGER NOT NULL CHECK (prediction_score >= 0 AND prediction_score <= 100),
+    mystical_message TEXT NOT NULL,
+    recommendations JSONB NOT NULL DEFAULT '[]',
+    files_changed INTEGER NOT NULL,
+    lines_added INTEGER NOT NULL,
+    lines_removed INTEGER NOT NULL,
+    files_renamed INTEGER DEFAULT 0,
+    binary_files INTEGER DEFAULT 0,
+    actual_result BOOLEAN,
+    accurate BOOLEAN,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_predictions_timestamp ON predictions(timestamp DESC);
+CREATE INDEX idx_predictions_repo ON predictions(repo);
+CREATE INDEX idx_predictions_pr_number ON predictions(pr_number);
+```
+
+**omens table:**
+```sql
+CREATE TABLE omens (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    prediction_id UUID NOT NULL REFERENCES predictions(id) ON DELETE CASCADE,
+    type TEXT NOT NULL CHECK (type IN ('minor', 'major', 'dark')),
+    title TEXT NOT NULL,
+    description TEXT NOT NULL,
+    file TEXT NOT NULL,
+    severity INTEGER NOT NULL CHECK (severity >= 1 AND severity <= 10),
+    historical_failures INTEGER DEFAULT 0,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX idx_omens_prediction_id ON omens(prediction_id);
+CREATE INDEX idx_omens_type ON omens(type);
+```
+
 ### Prediction Model
 
 ```python
@@ -373,7 +545,9 @@ function useWebSocket(url) {
     'context': {
         'files_changed': int,
         'lines_added': int,
-        'lines_removed': int
+        'lines_removed': int,
+        'files_renamed': int,
+        'binary_files': int
     },
     'actual_result': Optional[bool],  # None until outcome known
     'accurate': Optional[bool]  # None until outcome known
@@ -700,6 +874,84 @@ function useWebSocket(url) {
 *For any* prediction object, serializing to JSON and deserializing should produce an equivalent object with all fields preserved.
 
 **Validates: Requirements 11.5**
+
+### Property 45: Database Prediction Round-Trip
+
+*For any* prediction, saving it to the database and then retrieving it should produce an equivalent prediction with all fields preserved.
+
+**Validates: Requirements 13.2**
+
+### Property 46: Historical Data Ordering
+
+*For any* set of predictions with different timestamps, querying historical data should return them ordered by timestamp descending (newest first).
+
+**Validates: Requirements 13.4**
+
+### Property 47: Rate Limiter Request Tracking
+
+*For any* sequence of requests from an IP address, the rate limiter should accurately track the request count within the sliding time window.
+
+**Validates: Requirements 14.1**
+
+### Property 48: Rate Limited Response Headers
+
+*For any* request that is rate limited, the response should include a Retry-After header with the appropriate wait time.
+
+**Validates: Requirements 14.4**
+
+### Property 49: Rate Limit Logging
+
+*For any* rate-limited request, the system should create a log entry containing the IP address and timestamp.
+
+**Validates: Requirements 14.5**
+
+### Property 50: Renamed File Detection
+
+*For any* PR diff containing renamed files, the system should correctly detect the rename operation and count it as one file changed.
+
+**Validates: Requirements 15.1**
+
+### Property 51: Binary File Exclusion
+
+*For any* PR diff containing binary files, the system should identify them and exclude them from line count calculations (lines_added and lines_removed should not include binary file changes).
+
+**Validates: Requirements 15.2**
+
+### Property 52: Diff Statistics Accuracy
+
+*For any* valid PR diff, the extracted statistics (files_changed, lines_added, lines_removed, files_renamed, binary_files) should accurately reflect the diff content.
+
+**Validates: Requirements 15.3**
+
+### Property 53: Health Check Database Status
+
+*For any* health check request, the response should include database connectivity status.
+
+**Validates: Requirements 16.1**
+
+### Property 54: Health Check WebSocket Status
+
+*For any* health check request, the response should include WebSocket server status and active connection count.
+
+**Validates: Requirements 16.2**
+
+### Property 55: Health Check GitHub API Status
+
+*For any* health check request, the response should include GitHub API accessibility and rate limit status.
+
+**Validates: Requirements 16.3**
+
+### Property 56: Health Check LLM API Status
+
+*For any* health check request, the response should include LLM API service status.
+
+**Validates: Requirements 16.4**
+
+### Property 57: Unhealthy Component Status Code
+
+*For any* health check where at least one component is unhealthy, the response status code should be 503 and include details of failing components.
+
+**Validates: Requirements 16.5**
 
 ## Error Handling
 
