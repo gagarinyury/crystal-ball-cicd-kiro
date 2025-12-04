@@ -1,0 +1,61 @@
+.recommendations-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: rgba(75, 0, 130, 0.15);
+  border-radius: 15px;
+  border: 2px solid rgba(138, 43, 226, 0.4);
+  box-shadow: 0 4px 20px rgba(138, 43, 226, 0.2);
+}
+
+.recommendations-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #b794f6;
+  text-shadow: 0 0 20px rgba(183, 148, 246, 0.5);
+  font-family: 'Georgia', serif;
+}
+
+/* Recommendations list */
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Individual recommendation item */
+.recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+  transition: all 0.3s ease;
+}
+
+.recommendation-item:hover {
+  transform: translateX(5px);
+  border-color: rgba(138, 43, 226, 0.5);
+  box-shadow: 0 4px 15px rgba(138, 43, 226, 0.2);
+}
+
+/* Recommendation icon */
+.recommendation-icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Recommendation text */
+.recommendation-text {
+  color: #e0d4f7;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0;
+  font-family: 'Georgia', serif;
+}

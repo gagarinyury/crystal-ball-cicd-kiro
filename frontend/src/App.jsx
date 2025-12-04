@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import useWebSocket from './hooks/useWebSocket'
 import CrystalBall from './components/CrystalBall'
+import OmensFeed from './components/OmensFeed'
+import History from './components/History'
+import Recommendations from './components/Recommendations'
 
 function App() {
   // State management for predictions and history
@@ -15,6 +18,13 @@ function App() {
   useEffect(() => {
     if (lastMessage) {
       setPrediction(lastMessage)
+      
+      // Add to history with size constraint (max 10 items)
+      setHistory(prevHistory => {
+        const newHistory = [lastMessage, ...prevHistory]
+        // Keep only the 10 most recent predictions
+        return newHistory.slice(0, 10)
+      })
     }
   }, [lastMessage])
 
@@ -31,6 +41,9 @@ function App() {
 
       <main className="app-main">
         <CrystalBall prediction={prediction} />
+        <OmensFeed omens={prediction?.omens || []} />
+        <Recommendations recommendations={prediction?.recommendations || []} />
+        <History history={history} />
       </main>
     </div>
   )

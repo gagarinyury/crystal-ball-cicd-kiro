@@ -246,20 +246,20 @@
     - **Property 15: Score Color Coding**
     - **Validates: Requirements 4.3**
 
-- [ ] 12. Implement Omens Feed component
-  - [ ] 12.1 Create OmensFeed.jsx component
+- [x] 12. Implement Omens Feed component
+  - [x] 12.1 Create OmensFeed.jsx component
     - Display list of omens with cards
     - Show omen icon, title, description, file, severity
     - Handle empty state with calm message
     - _Requirements: 4.4, 4.5_
 
-  - [ ] 12.2 Implement omen icon mapping
+  - [x] 12.2 Implement omen icon mapping
     - ⚠️ for minor omens
     - 🔥 for major omens
     - ☠️ for dark omens
     - _Requirements: 4.4_
 
-  - [ ] 12.3 Create OmensFeed.css with mystical card styling
+  - [x] 12.3 Create OmensFeed.css with mystical card styling
     - Different colors for minor/major/dark omens
     - Severity badge styling
     - Card hover effects
@@ -269,19 +269,19 @@
     - **Property 16: Omen Icon Mapping**
     - **Validates: Requirements 4.4**
 
-- [ ] 13. Implement History and Recommendations components
-  - [ ] 13.1 Create History.jsx component
+- [x] 13. Implement History and Recommendations components
+  - [x] 13.1 Create History.jsx component
     - Display recent predictions list (max 10)
     - Show prediction score and mystical message for each
     - Maintain chronological order (newest first)
     - _Requirements: 6.1, 6.2, 6.3_
 
-  - [ ] 13.2 Implement history size constraint
+  - [x] 13.2 Implement history size constraint
     - Keep only 10 most recent predictions
     - Remove oldest when adding 11th
     - _Requirements: 6.2_
 
-  - [ ] 13.3 Create Recommendations component
+  - [x] 13.3 Create Recommendations component
     - Display recommendations in mystical guidance section
     - Show list of actionable suggestions
     - _Requirements: 4.6_

@@ -1,0 +1,172 @@
+.omens-feed {
+  width: 100%;
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+.omens-title {
+  font-size: 2rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #b794f6;
+  text-shadow: 0 0 20px rgba(183, 148, 246, 0.5);
+  font-family: 'Georgia', serif;
+}
+
+/* Empty state */
+.empty-state {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(75, 0, 130, 0.15);
+  border-radius: 15px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
+
+.calm-message {
+  font-size: 1.3rem;
+  color: #90EE90;
+  font-style: italic;
+  font-family: 'Georgia', serif;
+  margin: 0;
+  text-shadow: 0 0 15px rgba(144, 238, 144, 0.4);
+}
+
+/* Omens list */
+.omens-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Omen card base styling */
+.omen-card {
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 2px solid;
+  background: rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  cursor: default;
+}
+
+/* Card hover effects */
+.omen-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Minor omen styling */
+.omen-card.minor {
+  border-color: rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.omen-card.minor:hover {
+  border-color: rgba(255, 215, 0, 0.7);
+  box-shadow: 0 8px 25px rgba(255, 215, 0, 0.2);
+}
+
+/* Major omen styling */
+.omen-card.major {
+  border-color: rgba(255, 140, 0, 0.5);
+  background: linear-gradient(135deg, rgba(255, 140, 0, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.omen-card.major:hover {
+  border-color: rgba(255, 140, 0, 0.7);
+  box-shadow: 0 8px 25px rgba(255, 140, 0, 0.2);
+}
+
+/* Dark omen styling */
+.omen-card.dark {
+  border-color: rgba(220, 20, 60, 0.5);
+  background: linear-gradient(135deg, rgba(220, 20, 60, 0.05) 0%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+.omen-card.dark:hover {
+  border-color: rgba(220, 20, 60, 0.7);
+  box-shadow: 0 8px 25px rgba(220, 20, 60, 0.2);
+}
+
+/* Omen header */
+.omen-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.omen-icon {
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.omen-title {
+  flex: 1;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: #e0d4f7;
+  margin: 0;
+  font-family: 'Georgia', serif;
+}
+
+/* Severity badge styling */
+.severity-badge {
+  padding: 0.3rem 0.7rem;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: 1px solid;
+}
+
+.severity-badge.minor {
+  background: rgba(255, 215, 0, 0.2);
+  color: #FFD700;
+  border-color: rgba(255, 215, 0, 0.5);
+}
+
+.severity-badge.major {
+  background: rgba(255, 140, 0, 0.2);
+  color: #FF8C00;
+  border-color: rgba(255, 140, 0, 0.5);
+}
+
+.severity-badge.dark {
+  background: rgba(220, 20, 60, 0.2);
+  color: #FF6B6B;
+  border-color: rgba(220, 20, 60, 0.5);
+}
+
+/* Omen description */
+.omen-description {
+  color: #c4b5d6;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1rem 0;
+  padding-left: 2.5rem;
+}
+
+/* Omen file */
+.omen-file {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-left: 2.5rem;
+  font-size: 0.9rem;
+}
+
+.file-label {
+  color: #9370DB;
+  font-weight: 500;
+}
+
+.file-path {
+  color: #b794f6;
+  background: rgba(138, 43, 226, 0.15);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}
