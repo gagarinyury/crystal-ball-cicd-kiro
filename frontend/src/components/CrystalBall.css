@@ -1,0 +1,151 @@
+.crystal-ball-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.crystal-ball {
+  position: relative;
+  width: 250px;
+  height: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Orb with radial gradient background */
+.orb {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(138, 43, 226, 0.6);
+  overflow: hidden;
+  transition: all 0.5s ease;
+}
+
+/* Color coding based on score */
+.orb.green {
+  background: radial-gradient(circle at 30% 30%, #90EE90, #228B22, #0a3d0a);
+  box-shadow: 0 0 40px rgba(144, 238, 144, 0.6), 0 0 80px rgba(144, 238, 144, 0.3);
+}
+
+.orb.yellow {
+  background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500, #8B6914);
+  box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(255, 215, 0, 0.3);
+}
+
+.orb.red {
+  background: radial-gradient(circle at 30% 30%, #FF6B6B, #DC143C, #8B0000);
+  box-shadow: 0 0 40px rgba(255, 107, 107, 0.6), 0 0 80px rgba(255, 107, 107, 0.3);
+}
+
+.orb.neutral {
+  background: radial-gradient(circle at 30% 30%, #9370DB, #6A5ACD, #483D8B);
+  box-shadow: 0 0 40px rgba(138, 43, 226, 0.6), 0 0 80px rgba(138, 43, 226, 0.3);
+}
+
+/* Swirling mist animation */
+.mist {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: swirl 8s linear infinite;
+}
+
+@keyframes swirl {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.3;
+  }
+}
+
+/* Score display */
+.score {
+  position: relative;
+  z-index: 10;
+  font-size: 3rem;
+  font-weight: bold;
+  color: white;
+  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
+  font-family: 'Georgia', serif;
+}
+
+/* Gazing animation - pulse and glow effects */
+.crystal-ball.gazing .orb {
+  animation: pulse 2s ease-in-out;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  25% {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+  }
+  50% {
+    transform: scale(1.1);
+    filter: brightness(1.5);
+  }
+  75% {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+  }
+}
+
+.crystal-ball.gazing .mist {
+  animation: swirl 2s linear, glow 2s ease-in-out;
+}
+
+@keyframes glow {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* Mystical message */
+.mystical-message {
+  max-width: 500px;
+  text-align: center;
+  font-size: 1.2rem;
+  color: #E6E6FA;
+  font-style: italic;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+  padding: 1rem;
+  background: rgba(75, 0, 130, 0.2);
+  border-radius: 10px;
+  border: 1px solid rgba(138, 43, 226, 0.3);
+}

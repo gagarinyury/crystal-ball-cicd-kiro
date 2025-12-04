@@ -1,11 +1,22 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import './App.css'
+import useWebSocket from './hooks/useWebSocket'
+import CrystalBall from './components/CrystalBall'
 
 function App() {
-  // State management for predictions and connection
+  // State management for predictions and history
   const [prediction, setPrediction] = useState(null)
   const [history, setHistory] = useState([])
-  const [connected, setConnected] = useState(false)
+  
+  // WebSocket connection
+  const { connected, lastMessage, reconnectAttempt } = useWebSocket('ws://localhost:8000/ws')
+  
+  // Handle incoming WebSocket messages
+  useEffect(() => {
+    if (lastMessage) {
+      setPrediction(lastMessage)
+    }
+  }, [lastMessage])
 
   return (
     <div className="app">
@@ -19,9 +30,7 @@ function App() {
       </header>
 
       <main className="app-main">
-        <div className="placeholder-message">
-          <p>The mystical oracle awaits your pull requests...</p>
-        </div>
+        <CrystalBall prediction={prediction} />
       </main>
     </div>
   )
