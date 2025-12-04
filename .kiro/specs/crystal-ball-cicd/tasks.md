@@ -8,8 +8,8 @@
   - Create .gitignore to exclude .env, venv, node_modules
   - _Requirements: 9.1, 9.2, 9.3, 10.1, 10.2_
 
-- [ ] 2. Implement data models and core types
-  - [ ] 2.1 Create Pydantic models for Prediction, Omen, and WebhookPayload
+- [x] 2. Implement data models and core types
+  - [x] 2.1 Create Pydantic models for Prediction, Omen, and WebhookPayload
     - Define Prediction model with all required fields (id, timestamp, pr_url, prediction_score, omens, etc.)
     - Define Omen model with type, title, description, file, severity
     - Define GitHub webhook payload model for validation
@@ -19,27 +19,27 @@
     - **Property 44: Prediction Serialization Round-Trip**
     - **Validates: Requirements 11.5**
 
-- [ ] 3. Implement GitHub Webhook Handler
-  - [ ] 3.1 Create GitHubHandler class with signature validation
+- [x] 3. Implement GitHub Webhook Handler
+  - [x] 3.1 Create GitHubHandler class with signature validation
     - Implement HMAC-SHA256 signature validation using webhook secret
     - Implement validate_signature method
     - _Requirements: 7.1, 7.2_
 
-  - [ ] 3.2 Implement webhook payload parsing and filtering
+  - [x] 3.2 Implement webhook payload parsing and filtering
     - Parse JSON webhook payloads
     - Filter for PR events (opened, synchronize)
     - Validate required fields exist
     - Return 400 for malformed payloads
     - _Requirements: 1.2, 7.3, 11.1, 11.2_
 
-  - [ ] 3.3 Implement PR diff fetching with retry logic
+  - [x] 3.3 Implement PR diff fetching with retry logic
     - Use httpx async client to fetch diff from GitHub API
     - Implement exponential backoff retry (1s, 2s, 4s)
     - Handle rate limiting by checking headers
     - Extract files_changed, lines_added, lines_removed from diff
     - _Requirements: 1.3, 8.1, 8.2_
 
-  - [ ] 3.4 Implement PR comment posting
+  - [x] 3.4 Implement PR comment posting
     - Format prediction as GitHub comment with markdown
     - Post comment to PR using GitHub API
     - Handle API errors gracefully
@@ -57,25 +57,25 @@
     - **Property 2: Diff Parsing Completeness**
     - **Validates: Requirements 1.3**
 
-- [ ] 4. Implement AI Analyzer
-  - [ ] 4.1 Create AIAnalyzer class with Anthropic client
+- [x] 4. Implement AI Analyzer
+  - [x] 4.1 Create AIAnalyzer class with Anthropic client
     - Initialize Anthropic client with API key
     - Implement structured prompt construction
     - _Requirements: 2.1_
 
-  - [ ] 4.2 Implement code diff analysis with LLM
+  - [x] 4.2 Implement code diff analysis with LLM
     - Send diff to Claude API with structured prompt
     - Parse JSON response from LLM
     - Validate response schema (prediction_score, omens, mystical_message)
     - _Requirements: 2.1, 2.2, 11.3_
 
-  - [ ] 4.3 Implement omen classification logic
+  - [x] 4.3 Implement omen classification logic
     - Map severity 1-3 to "minor"
     - Map severity 4-7 to "major"
     - Map severity 8-10 to "dark"
     - _Requirements: 2.4_
 
-  - [ ] 4.4 Implement fallback prediction for API failures
+  - [x] 4.4 Implement fallback prediction for API failures
     - Return fallback with 50% score and generic warning
     - Handle malformed LLM responses
     - Handle rate limiting with queueing
