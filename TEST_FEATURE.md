@@ -30,6 +30,9 @@ Frontend connected to server - testing full flow!
 ## UI Update
 New curved text under crystal ball + emoji explosion effect!
 
+## Ghost Mode
+Added floating ghost in crystal ball that fades in and out!
+
 ## Clean Code Example
 ```python
 import subprocess
