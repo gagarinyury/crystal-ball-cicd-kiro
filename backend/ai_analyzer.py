@@ -33,7 +33,7 @@ class AIAnalyzer:
             api_key: Anthropic API key for authentication
         """
         self.client = Anthropic(api_key=api_key)
-        self.model = "claude-3-5-sonnet-20241022"  # Latest Claude model
+        self.model = "claude-3-5-sonnet-20241022"  # Claude 3.5 Sonnet
         logger.info("AIAnalyzer initialized with Anthropic client")
     
     def _construct_prompt(self, diff: str, context: Dict[str, Any]) -> str:
