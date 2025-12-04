@@ -18,5 +18,8 @@ Backend fixed - follow_redirects enabled!
 Model name fixed - using claude-3-5-sonnet-20240620
 
 
-## Test Complete  
+## Test Complete
 Ready for AI analysis!
+
+## Haiku Test
+Now using claude-3-5-haiku-20241022 model!
