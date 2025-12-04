@@ -290,37 +290,37 @@
     - **Property 25: History Size Constraint**
     - **Validates: Requirements 6.2**
 
-- [ ] 14. Wire up App component with all child components
-  - [ ] 14.1 Integrate WebSocket hook in App
+- [x] 14. Wire up App component with all child components
+  - [x] 14.1 Integrate WebSocket hook in App
     - Use useWebSocket hook
     - Manage prediction state
     - Manage history state
     - _Requirements: 5.5, 6.1_
 
-  - [ ] 14.2 Connect all child components
+  - [x] 14.2 Connect all child components
     - Pass prediction to CrystalBall
     - Pass omens to OmensFeed
     - Pass recommendations to Recommendations
     - Pass history to History
     - _Requirements: 4.1, 4.4, 4.6, 6.3_
 
-  - [ ] 14.3 Create App.css with mystical theme
+  - [x] 14.3 Create App.css with mystical theme
     - Dark purple/blue gradient background
     - Mystical glow effects
     - Responsive layout
     - _Requirements: 4.1_
 
-- [ ] 15. Checkpoint - Ensure frontend tests pass
+- [x] 15. Checkpoint - Ensure frontend tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [ ] 16. End-to-end integration and testing
-  - [ ] 16.1 Test local backend startup
+  - [x] 16.1 Test local backend startup
     - Start backend with uvicorn
     - Verify health endpoint responds
     - Check logs for proper initialization
     - _Requirements: 10.1, 10.5_
 
-  - [ ] 16.2 Test local frontend startup
+  - [-] 16.2 Test local frontend startup
     - Start frontend with npm run dev
     - Verify dashboard loads
     - Check WebSocket connection establishes
@@ -346,22 +346,227 @@
     - Verify prediction appears on dashboard
     - _Requirements: 10.4_
 
-- [ ] 17. Final polish and documentation
-  - [ ] 17.1 Create comprehensive README.md
-    - Document setup instructions
-    - Document environment variables
-    - Document running instructions
-    - Include troubleshooting section
-    - _Requirements: 10.1, 10.2_
+- [ ] 17. Implement Configuration Service for production
+  - [ ] 17.1 Create config.py with typed configuration
+    - Define Config class with properties for all environment variables
+    - Load DATABASE_URL, RATE_LIMIT_PER_MINUTE, and other new config
+    - Implement validation method to check required config on startup
+    - Provide default values for optional configuration
+    - _Requirements: 12.1, 12.2, 13.1, 14.1_
 
-  - [ ] 17.2 Add inline code comments
-    - Document complex logic
-    - Explain mystical prompt structure
-    - Document retry and backoff logic
-    - _Requirements: 8.1, 8.2, 8.4_
+  - [ ] 17.2 Update .env.example with new variables
+    - Add DATABASE_URL with PostgreSQL connection string example
+    - Add RATE_LIMIT_PER_MINUTE with default value
+    - Add VITE_WS_URL for frontend WebSocket configuration
+    - Document each variable with comments
+    - _Requirements: 12.1, 13.1, 14.1_
 
-  - [ ] 17.3 Create example .env.example file
-    - Include all required variables with placeholders
+- [ ] 18. Implement PostgreSQL database layer
+  - [ ] 18.1 Create database schema and migrations
+    - Create predictions table with all required fields
+    - Create omens table with foreign key to predictions
+    - Add indexes for timestamp, repo, and pr_number
+    - Create migration script for initial schema
+    - _Requirements: 13.1, 13.2_
+
+  - [ ] 18.2 Create DatabaseService class
+    - Initialize asyncpg connection pool
+    - Implement connect method with retry logic and exponential backoff
+    - Implement disconnect method for cleanup
+    - Handle connection failures gracefully
+    - _Requirements: 13.1, 13.5_
+
+  - [ ] 18.3 Implement prediction storage methods
+    - Implement save_prediction to insert prediction and omens
+    - Implement get_predictions to retrieve recent predictions
+    - Implement update_outcome to record actual deployment results
+    - Ensure all fields are properly serialized/deserialized
+    - _Requirements: 13.2, 13.3, 13.4_
+
+  - [ ] 18.4 Implement accuracy metrics calculation
+    - Implement get_accuracy_metrics to calculate from database
+    - Query predictions with outcomes
+    - Calculate accuracy rate as percentage
+    - Return total predictions, predictions with outcomes, accurate count
+    - _Requirements: 13.4_
+
+  - [ ] 18.5 Implement health check for database
+    - Implement health_check method to verify connectivity
+    - Execute simple query to test connection
+    - Return boolean status
+    - _Requirements: 16.1_
+
+  - [ ]* 18.6 Write property test for database round-trip
+    - **Property 45: Database Prediction Round-Trip**
+    - **Validates: Requirements 13.2**
+
+  - [ ]* 18.7 Write property test for historical data ordering
+    - **Property 46: Historical Data Ordering**
+    - **Validates: Requirements 13.4**
+
+- [ ] 19. Implement rate limiting
+  - [ ] 19.1 Create RateLimiter class
+    - Initialize with requests_per_minute threshold from config
+    - Use in-memory dict to track requests per IP with timestamps
+    - Implement sliding window algorithm
+    - _Requirements: 14.1_
+
+  - [ ] 19.2 Implement rate limit checking
+    - Implement check_rate_limit method
+    - Return tuple of (is_allowed, retry_after_seconds)
+    - Calculate retry time based on oldest request in window
+    - _Requirements: 14.2, 14.4_
+
+  - [ ] 19.3 Implement request recording and cleanup
+    - Implement record_request to add timestamp for IP
+    - Implement cleanup_expired to remove old entries
+    - Schedule periodic cleanup task
+    - _Requirements: 14.1, 14.3_
+
+  - [ ] 19.4 Add rate limiting middleware to webhook endpoint
+    - Apply rate limiter to POST /webhook/github endpoint
+    - Return 429 status when limit exceeded
+    - Include Retry-After header in response
+    - Log rate limit events with IP and timestamp
+    - _Requirements: 14.2, 14.4, 14.5_
+
+  - [ ]* 19.5 Write property test for rate limiter tracking
+    - **Property 47: Rate Limiter Request Tracking**
+    - **Validates: Requirements 14.1**
+
+  - [ ]* 19.6 Write property test for rate limited response headers
+    - **Property 48: Rate Limited Response Headers**
+    - **Validates: Requirements 14.4**
+
+  - [ ]* 19.7 Write property test for rate limit logging
+    - **Property 49: Rate Limit Logging**
+    - **Validates: Requirements 14.5**
+
+- [ ] 20. Improve diff parsing for renamed and binary files
+  - [ ] 20.1 Enhance GitHubHandler diff parsing
+    - Detect renamed files using "rename from/to" markers in diff
+    - Detect binary files using "Binary files differ" marker
+    - Update context to include files_renamed and binary_files counts
+    - Exclude binary files from lines_added and lines_removed
+    - _Requirements: 15.1, 15.2, 15.3_
+
+  - [ ] 20.2 Handle edge cases in diff parsing
+    - Handle files that are both renamed and modified
+    - Handle empty diffs gracefully
+    - Handle malformed diff content without crashing
+    - Add comprehensive error handling
+    - _Requirements: 15.4, 15.5_
+
+  - [ ]* 20.3 Write property test for renamed file detection
+    - **Property 50: Renamed File Detection**
+    - **Validates: Requirements 15.1**
+
+  - [ ]* 20.4 Write property test for binary file exclusion
+    - **Property 51: Binary File Exclusion**
+    - **Validates: Requirements 15.2**
+
+  - [ ]* 20.5 Write property test for diff statistics accuracy
+    - **Property 52: Diff Statistics Accuracy**
+    - **Validates: Requirements 15.3**
+
+- [ ] 21. Implement comprehensive health checks
+  - [ ] 21.1 Enhance health endpoint with component checks
+    - Check database connectivity using DatabaseService.health_check
+    - Check WebSocket server status and active connection count
+    - Check GitHub API accessibility with test request
+    - Check LLM API accessibility with test request
+    - _Requirements: 16.1, 16.2, 16.3, 16.4_
+
+  - [ ] 21.2 Implement health check response logic
+    - Return 503 status if any component is unhealthy
+    - Return 200 status if all components are healthy
+    - Include detailed status for each component in response
+    - Include accuracy metrics and prediction count
+    - _Requirements: 16.5, 16.6_
+
+  - [ ]* 21.3 Write property test for health check database status
+    - **Property 53: Health Check Database Status**
+    - **Validates: Requirements 16.1**
+
+  - [ ]* 21.4 Write property test for health check WebSocket status
+    - **Property 54: Health Check WebSocket Status**
+    - **Validates: Requirements 16.2**
+
+  - [ ]* 21.5 Write property test for health check GitHub API status
+    - **Property 55: Health Check GitHub API Status**
+    - **Validates: Requirements 16.3**
+
+  - [ ]* 21.6 Write property test for health check LLM API status
+    - **Property 56: Health Check LLM API Status**
+    - **Validates: Requirements 16.4**
+
+  - [ ]* 21.7 Write property test for unhealthy component status code
+    - **Property 57: Unhealthy Component Status Code**
+    - **Validates: Requirements 16.5**
+
+- [ ] 22. Configure frontend WebSocket URL from environment
+  - [ ] 22.1 Update useWebSocket hook to read from environment
+    - Read WebSocket URL from import.meta.env.VITE_WS_URL
+    - Use default localhost URL if not set
+    - Remove hardcoded IP addresses from source code
+    - _Requirements: 12.1, 12.2, 12.3_
+
+  - [ ] 22.2 Update vite.config.js for environment variables
+    - Ensure VITE_WS_URL is properly loaded
+    - Add development default in config
+    - Document environment variable usage
+    - _Requirements: 12.1, 12.4_
+
+- [ ] 23. Update main application to wire new components
+  - [ ] 23.1 Initialize DatabaseService in main.py
+    - Create DatabaseService instance with connection string from config
+    - Connect to database on startup
+    - Disconnect on shutdown
+    - Handle connection failures gracefully
+    - _Requirements: 13.1, 13.5_
+
+  - [ ] 23.2 Replace in-memory storage with database
+    - Update PredictionEngine to use DatabaseService
+    - Store predictions in database instead of memory
+    - Load historical data from database on startup
+    - Update accuracy calculation to use database
+    - _Requirements: 13.2, 13.3, 13.4_
+
+  - [ ] 23.3 Apply rate limiting to webhook endpoint
+    - Initialize RateLimiter with config
+    - Add rate limiting middleware to webhook endpoint
+    - Handle rate limit responses properly
+    - _Requirements: 14.1, 14.2, 14.4_
+
+  - [ ] 23.4 Update health endpoint with comprehensive checks
+    - Add database health check
+    - Add WebSocket health check
+    - Add GitHub API health check
+    - Add LLM API health check
+    - Return appropriate status codes
+    - _Requirements: 16.1, 16.2, 16.3, 16.4, 16.5, 16.6_
+
+- [ ] 24. Checkpoint - Ensure all production features work
+  - Ensure all tests pass, ask the user if questions arise.
+
+- [ ] 25. Update documentation for production deployment
+  - [ ] 25.1 Update README.md with production setup
+    - Document PostgreSQL setup and configuration
+    - Document rate limiting configuration
+    - Document environment variables for production
+    - Add deployment instructions
+    - _Requirements: 13.1, 14.1_
+
+  - [ ] 25.2 Create database migration guide
+    - Document how to run initial schema migration
+    - Document backup and restore procedures
+    - Add troubleshooting for database issues
+    - _Requirements: 13.1_
+
+  - [ ] 25.3 Update .env.example with all production variables
+    - Include DATABASE_URL example
+    - Include RATE_LIMIT_PER_MINUTE
+    - Include VITE_WS_URL for frontend
     - Add comments explaining each variable
-    - _Requirements: 9.1, 9.2, 9.3_
+    - _Requirements: 12.1, 13.1, 14.1_
 
