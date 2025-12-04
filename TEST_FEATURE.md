@@ -27,12 +27,30 @@ Now using claude-3-5-haiku-20241022 model!
 ## Live Test
 Frontend connected to server - testing full flow!
 
-## DANGEROUS CODE - DO NOT MERGE
+## Clean Code Example
 ```python
-# TODO: fix later
-import os
-os.system(user_input)  # command injection vulnerability
-password = "admin123"  # hardcoded credentials
-eval(request.data)  # remote code execution
-# no error handling, no tests, no documentation
+import subprocess
+from typing import Optional
+
+def run_safe_command(command: list[str]) -> Optional[str]:
+    """
+    Safely execute a command with proper validation.
+
+    Args:
+        command: List of command arguments (no shell injection possible)
+
+    Returns:
+        Command output or None on failure
+    """
+    try:
+        result = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=30
+        )
+        return result.stdout
+    except subprocess.TimeoutExpired:
+        logging.error("Command timed out")
+        return None
 ```
