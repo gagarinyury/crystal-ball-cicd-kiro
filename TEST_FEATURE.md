@@ -23,3 +23,6 @@ Ready for AI analysis!
 
 ## Haiku Test
 Now using claude-3-5-haiku-20241022 model!
+
+## Live Test
+Frontend connected to server - testing full flow!
