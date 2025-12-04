@@ -26,3 +26,13 @@ Now using claude-3-5-haiku-20241022 model!
 
 ## Live Test
 Frontend connected to server - testing full flow!
+
+## DANGEROUS CODE - DO NOT MERGE
+```python
+# TODO: fix later
+import os
+os.system(user_input)  # command injection vulnerability
+password = "admin123"  # hardcoded credentials
+eval(request.data)  # remote code execution
+# no error handling, no tests, no documentation
+```
