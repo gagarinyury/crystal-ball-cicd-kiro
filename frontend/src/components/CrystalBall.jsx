@@ -26,7 +26,7 @@ function CrystalBall({ prediction }) {
 
   // Split long messages into multiple lines for curved text (pyramid shape)
   const splitMessage = (msg) => {
-    const lineLimits = [40, 50, 60] // Pyramid: narrow->medium->wide
+    const lineLimits = [45, 55, 70] // Pyramid: narrow->medium->wide
     const words = msg.split(' ')
     const lines = []
     let currentLine = ''
