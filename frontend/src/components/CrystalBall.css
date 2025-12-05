@@ -525,23 +525,109 @@
   }
 }
 
-/* Curved text under the ball */
-.curved-text-container {
+/* Mystical message box */
+.mystical-message-box {
   width: 100%;
-  max-width: 500px;
-  margin-top: -60px;
+  max-width: 600px;
+  margin-top: -40px;
+  text-align: center;
+  position: relative;
+  background: radial-gradient(ellipse at center,
+    rgba(75, 0, 130, 0.3) 0%,
+    rgba(138, 43, 226, 0.15) 40%,
+    transparent 70%);
+  border-radius: 20px;
+  padding: 1rem;
+  overflow: hidden;
 }
 
-.curved-text-svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
+/* Starry background - more stars */
+.mystical-message-box::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(10, 10, 40, 0.4);
+  background-image:
+    radial-gradient(2px 2px at 20% 30%, white, transparent),
+    radial-gradient(2px 2px at 60% 70%, white, transparent),
+    radial-gradient(1px 1px at 50% 50%, white, transparent),
+    radial-gradient(1px 1px at 80% 10%, white, transparent),
+    radial-gradient(2px 2px at 90% 60%, white, transparent),
+    radial-gradient(1px 1px at 33% 80%, white, transparent),
+    radial-gradient(1px 1px at 15% 60%, white, transparent),
+    radial-gradient(2px 2px at 40% 20%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(1px 1px at 25% 90%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(2px 2px at 85% 85%, rgba(255,255,255,0.9), transparent),
+    radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(1px 1px at 95% 30%, rgba(255,255,255,0.6), transparent),
+    radial-gradient(2px 2px at 45% 65%, rgba(255,255,255,0.8), transparent),
+    radial-gradient(1px 1px at 65% 15%, rgba(255,255,255,0.7), transparent),
+    radial-gradient(1px 1px at 5% 45%, rgba(255,255,255,0.5), transparent),
+    radial-gradient(2px 2px at 75% 95%, rgba(255,255,255,0.9), transparent);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  animation: stars 20s linear infinite;
+  opacity: 0.9;
+  pointer-events: none;
 }
 
-.curved-text {
+/* Lightning effect behind text */
+.mystical-message-box::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 3px;
+  height: 60%;
+  background: linear-gradient(to bottom,
+    transparent,
+    rgba(138, 43, 226, 0.8),
+    rgba(186, 85, 211, 0.6),
+    transparent);
+  transform: translate(-50%, -50%) rotate(15deg);
+  filter: blur(2px);
+  animation: lightning 3s ease-in-out infinite;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.mystical-message-text {
   font-size: 24px;
   font-family: 'Georgia', serif;
   font-style: italic;
-  fill: #E6E6FA;
-  filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.8));
+  font-weight: 500;
+  color: #E6E6FA;
+  text-shadow: 0 0 10px rgba(138, 43, 226, 0.8), 0 0 20px rgba(138, 43, 226, 0.5);
+  line-height: 1.6;
+  margin: 0;
+  padding: 1rem 2rem;
+  word-wrap: break-word;
+  white-space: normal;
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes stars {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 100% 100%;
+  }
+}
+
+@keyframes lightning {
+  0%, 90%, 100% {
+    opacity: 0;
+  }
+  92%, 94% {
+    opacity: 0.8;
+  }
+  93% {
+    opacity: 0.3;
+  }
 }

@@ -26,7 +26,7 @@ function CrystalBall({ prediction }) {
 
   // Split long messages into multiple lines for curved text (pyramid shape)
   const splitMessage = (msg) => {
-    const lineLimits = [40, 50, 60] // Pyramid: narrow->medium->wide
+    const lineLimits = [40, 50, 60, 70, 80] // Pyramid: narrow->wide (5 lines)
     const words = msg.split(' ')
     const lines = []
     let currentLine = ''
@@ -51,7 +51,7 @@ function CrystalBall({ prediction }) {
       lines.push(currentLine)
     }
 
-    return lines.slice(0, 3) // Max 3 lines
+    return lines.slice(0, 5) // Max 5 lines
   }
 
   const messageLines = splitMessage(message)
@@ -92,21 +92,10 @@ function CrystalBall({ prediction }) {
           )}
         </div>
       </div>
-      <div className="curved-text-container">
-        <svg viewBox="0 0 500 150" className="curved-text-svg">
-          <defs>
-            <path id="curve1" d="M 110,30 Q 250,60 390,30" fill="transparent" />
-            <path id="curve2" d="M 60,75 Q 250,105 440,75" fill="transparent" />
-            <path id="curve3" d="M 10,120 Q 250,150 490,120" fill="transparent" />
-          </defs>
-          {messageLines.map((line, index) => (
-            <text key={index} className="curved-text" style={{ fontSize: `${fontSize}px` }}>
-              <textPath href={`#curve${index + 1}`} startOffset="50%" textAnchor="middle">
-                {line}
-              </textPath>
-            </text>
-          ))}
-        </svg>
+      <div className="mystical-message-box">
+        <p className="mystical-message-text" style={{ fontSize: `${fontSize}px` }}>
+          {message}
+        </p>
       </div>
     </div>
   )
