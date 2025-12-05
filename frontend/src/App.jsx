@@ -14,7 +14,7 @@ function App() {
   const [explosionTrigger, setExplosionTrigger] = useState(0)
 
   // WebSocket connection
-  const { connected, lastMessage, reconnectAttempt } = useWebSocket('ws://207.180.199.169:8023/ws')
+  const { connected, lastMessage, reconnectAttempt } = useWebSocket('ws://localhost:8023/ws')
 
   // Handle incoming WebSocket messages
   useEffect(() => {

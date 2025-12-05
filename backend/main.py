@@ -70,8 +70,11 @@ for handler in logging.root.handlers:
 logger = logging.getLogger(__name__)
 
 
-# Load environment variables
-load_dotenv()
+# Load environment variables from project root
+import pathlib
+project_root = pathlib.Path(__file__).parent.parent
+dotenv_path = project_root / '.env'
+load_dotenv(dotenv_path=dotenv_path)
 
 # Validate required environment variables
 REQUIRED_ENV_VARS = {
