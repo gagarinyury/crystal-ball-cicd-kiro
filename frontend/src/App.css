@@ -46,16 +46,29 @@
 }
 
 .mystical-title {
-  font-size: 2.5rem;
+  font-size: 3.75rem;
   font-weight: 700;
   margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.emoji-icon {
+  font-size: 3.75rem;
+  filter: none;
+  display: inline-block;
+}
+
+.title-text {
+  font-family: 'Creepster', 'Nosifer', 'Butcherman', cursive;
   background: linear-gradient(90deg, #b794f6, #e0d4f7, #b794f6);
   background-size: 200% auto;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: shimmer 3s linear infinite;
-  filter: drop-shadow(0 0 30px rgba(183, 148, 246, 0.5));
+  letter-spacing: 0.05em;
 }
 
 @keyframes shimmer {
