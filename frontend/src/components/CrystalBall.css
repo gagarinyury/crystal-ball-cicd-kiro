@@ -525,23 +525,41 @@
   }
 }
 
-/* Curved text under the ball */
-.curved-text-container {
+/* Mystical message under the ball */
+.mystical-message {
   width: 100%;
-  max-width: 400px;
-  margin-top: -60px;
+  max-width: 600px;
+  margin-top: -40px;
+  padding: 1.5rem 2rem;
+  text-align: center;
 }
 
-.curved-text-svg {
-  width: 100%;
-  height: auto;
-  overflow: visible;
-}
-
-.curved-text {
-  font-size: 32px;
+.message-text {
+  font-size: 1.25rem;
   font-family: 'Georgia', serif;
   font-style: italic;
-  fill: #E6E6FA;
-  filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.8));
+  color: #E6E6FA;
+  line-height: 1.6;
+  margin: 0;
+  text-shadow:
+    0 0 10px rgba(138, 43, 226, 0.8),
+    0 0 20px rgba(138, 43, 226, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.3);
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+@keyframes textGlow {
+  0%, 100% {
+    text-shadow:
+      0 0 10px rgba(138, 43, 226, 0.8),
+      0 0 20px rgba(138, 43, 226, 0.5),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+  50% {
+    text-shadow:
+      0 0 15px rgba(138, 43, 226, 1),
+      0 0 30px rgba(138, 43, 226, 0.7),
+      0 0 40px rgba(138, 43, 226, 0.4),
+      0 2px 4px rgba(0, 0, 0, 0.3);
+  }
 }
