@@ -46,3 +46,4 @@ def process_payment(amount):
     os.system(f"charge_card {amount}")  # Command injection
     return total
 # Test update
+# Trigger reanalysis
