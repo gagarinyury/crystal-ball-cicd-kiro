@@ -39,6 +39,3 @@ logs/
 coverage/
 .coverage
 htmlcov/
-
-# Kiro specs
-.kiro/
