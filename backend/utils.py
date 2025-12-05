@@ -1,73 +1,94 @@
 """
-Utility functions for Crystal Ball CI/CD system.
+Utility functions for Crystal Ball CI/CD backend.
 
-This module provides helper functions for data validation and formatting.
+This module provides helper functions for data validation,
+formatting, and common operations.
 """
 
-from typing import Optional, Dict, Any
+from typing import List, Dict, Any, Optional
+from datetime import datetime
 import re
 
 
-def sanitize_input(user_input: str, max_length: int = 255) -> str:
+def validate_email(email: str) -> bool:
     """
-    Sanitize user input to prevent injection attacks.
+    Validate email address format.
 
     Args:
-        user_input: Raw user input string
+        email: Email address to validate
+
+    Returns:
+        True if valid, False otherwise
+    """
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+
+def format_timestamp(dt: datetime) -> str:
+    """
+    Format datetime object to ISO 8601 string.
+
+    Args:
+        dt: Datetime object to format
+
+    Returns:
+        ISO 8601 formatted string
+    """
+    return dt.isoformat()
+
+
+def sanitize_input(text: str, max_length: int = 1000) -> str:
+    """
+    Sanitize user input by removing potentially dangerous characters.
+
+    Args:
+        text: Input text to sanitize
         max_length: Maximum allowed length
 
     Returns:
-        Sanitized string safe for processing
+        Sanitized text
     """
-    if not user_input:
-        return ""
+    # Remove null bytes and control characters
+    sanitized = ''.join(char for char in text if ord(char) >= 32 or char in '\n\r\t')
 
-    # Remove potentially dangerous characters
-    sanitized = re.sub(r'[<>\'\";&|`$]', '', user_input)
-
-    # Trim to max length
-    sanitized = sanitized[:max_length]
-
-    return sanitized.strip()
+    # Truncate to max length
+    return sanitized[:max_length]
 
 
-def format_prediction_score(score: float) -> str:
+def calculate_severity_average(omens: List[Dict[str, Any]]) -> float:
     """
-    Format prediction score with color indicator.
+    Calculate average severity from list of omens.
 
     Args:
-        score: Prediction score (0-100)
+        omens: List of omen dictionaries with 'severity' key
 
     Returns:
-        Formatted string with emoji indicator
+        Average severity score (0.0 if no omens)
     """
-    if score >= 80:
-        return f"🟢 {score:.1f}%"
-    elif score >= 60:
-        return f"🟡 {score:.1f}%"
-    else:
-        return f"🔴 {score:.1f}%"
+    if not omens:
+        return 0.0
+
+    total_severity = sum(omen.get('severity', 0) for omen in omens)
+    return total_severity / len(omens)
 
 
-def validate_webhook_payload(payload: Dict[str, Any]) -> bool:
+def filter_omens_by_severity(
+    omens: List[Dict[str, Any]],
+    min_severity: int = 1,
+    max_severity: int = 10
+) -> List[Dict[str, Any]]:
     """
-    Validate GitHub webhook payload structure.
+    Filter omens by severity range.
 
     Args:
-        payload: Webhook payload dictionary
+        omens: List of omen dictionaries
+        min_severity: Minimum severity (inclusive)
+        max_severity: Maximum severity (inclusive)
 
     Returns:
-        True if payload is valid, False otherwise
+        Filtered list of omens
     """
-    required_fields = ['action', 'pull_request', 'repository']
-
-    for field in required_fields:
-        if field not in payload:
-            return False
-
-    # Validate PR structure
-    pr = payload.get('pull_request', {})
-    if not all(key in pr for key in ['number', 'diff_url', 'html_url']):
-        return False
-
-    return True
+    return [
+        omen for omen in omens
+        if min_severity <= omen.get('severity', 0) <= max_severity
+    ]
