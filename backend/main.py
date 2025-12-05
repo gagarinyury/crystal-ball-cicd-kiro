@@ -70,8 +70,8 @@ for handler in logging.root.handlers:
 logger = logging.getLogger(__name__)
 
 
-# Load environment variables (override system env vars with .env file)
-load_dotenv(override=True)
+# Load environment variables
+load_dotenv()
 
 # Validate required environment variables
 REQUIRED_ENV_VARS = {
