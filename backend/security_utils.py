@@ -81,3 +81,4 @@ def hash_sensitive_data(data: str) -> str:
     """
     return hashlib.sha256(data.encode()).hexdigest()
 # Updated for demo
+# Demo trigger
