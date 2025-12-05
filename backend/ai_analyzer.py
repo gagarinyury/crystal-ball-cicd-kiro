@@ -47,7 +47,7 @@ class AIAnalyzer:
         Returns:
             Formatted prompt string
         """
-        prompt = f"""You are a mystical code oracle analyzing pull request changes.
+        prompt = f"""You are a STRICT security-focused code oracle. Your role is to be a HARSH critic and find EVERY possible issue.
 
 Code Diff:
 {diff}
@@ -58,31 +58,51 @@ Context:
 - Lines removed: {context.get('lines_removed', 0)}
 - Repository: {context.get('repo', 'unknown')}
 
-Analyze this diff and predict potential deployment issues.
+CRITICAL MISSION: Analyze this diff with EXTREME SKEPTICISM. Be a tough critic - assume code is guilty until proven innocent.
 
-Return ONLY valid JSON (no markdown, no code blocks) with this exact structure:
+MANDATORY SECURITY CHECKS (severity 8-10 = DARK OMENS):
+🔴 Code Injection: eval(), exec(), compile() usage
+🔴 Deserialization: pickle.loads(), yaml.load() without safe_load
+🔴 Command Injection: os.system(), subprocess with shell=True, string concatenation in commands
+🔴 SQL Injection: String concatenation/f-strings in SQL queries (use parameterized queries!)
+🔴 Hardcoded Secrets: API keys, passwords, tokens, connection strings in code
+🔴 Path Traversal: File operations without path validation, user input in file paths
+🔴 XSS/Injection: Missing input sanitization, unescaped output
+🔴 Exposed Debug: Debug endpoints, environment variable dumps, stack traces to users
+
+ADDITIONAL CHECKS (severity 4-7 = MAJOR):
+⚠️ Missing error handling, unvalidated inputs
+⚠️ Race conditions, concurrency issues
+⚠️ Breaking API changes without versioning
+⚠️ Memory leaks, resource exhaustion
+⚠️ Missing authentication/authorization
+⚠️ Logging sensitive data
+
+SCORING RULES - BE HARSH:
+- ANY security vulnerability = score MUST be 40 or below
+- Multiple critical issues = score 20 or below
+- Hardcoded secrets = automatic 15 score
+- Command/SQL injection = automatic 10 score
+- No issues at all = 95-100 (rare!)
+- Minor issues only = 75-90
+
+Return ONLY valid JSON (no markdown, no code blocks):
 {{
-    "prediction_score": <number 0-100, where 100 = certain success>,
+    "prediction_score": <number 0-100>,
     "omens": [
         {{
             "type": "minor|major|dark",
-            "title": "<brief warning>",
-            "description": "<detailed explanation in mystical but clear language>",
-            "file": "<affected file path>",
+            "title": "<specific technical issue>",
+            "description": "<explain the danger and impact in mystical but clear language>",
+            "file": "<exact file path>",
             "severity": <number 1-10>
         }}
     ],
-    "mystical_message": "<fortune teller style summary, avoid technical jargon>",
-    "recommendations": ["<actionable suggestion>", ...]
+    "mystical_message": "<mystical fortune teller summary - encouraging if truly safe, DIRE WARNINGS if dangerous>",
+    "recommendations": ["<specific fix, be technical and actionable>", ...]
 }}
 
-Guidelines:
-- Use mystical language but keep it understandable
-- Severity 1-3: minor issues (code smells, style)
-- Severity 4-7: major issues (potential bugs, breaking changes)
-- Severity 8-10: dark omens (security, critical failures)
-- Empty omens array if no issues found
-- Mystical message should be encouraging for high scores, cautionary for low scores"""
+BE THOROUGH. FIND EVERYTHING. NO CODE IS PERFECT."""
         
         return prompt
     
