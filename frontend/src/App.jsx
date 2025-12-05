@@ -35,7 +35,9 @@ function App() {
     <div className="app">
       <EmojiExplosion trigger={explosionTrigger} score={prediction?.prediction_score} />
       <header className="app-header">
-        <h1 className="mystical-title">🔮 Crystal Ball CI/CD</h1>
+        <h1 className="mystical-title">
+          <span className="crystal-ball-emoji">🔮</span> Cryst<span className="pumpkin-emoji">🎃</span>l B<span className="pumpkin-emoji">🎃</span>ll CI/CD
+        </h1>
         <div className="connection-status">
           <span className={`status-indicator ${connected ? 'connected' : 'disconnected'}`}>
             {connected ? '● Connected' : '○ Disconnected'}

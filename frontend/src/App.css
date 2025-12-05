@@ -73,13 +73,51 @@
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0;
-  background: linear-gradient(90deg, #b794f6, #e0d4f7, #b794f6);
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: shimmer 3s linear infinite;
-  filter: drop-shadow(0 0 30px rgba(183, 148, 246, 0.5));
+  color: #b794f6;
+  animation: glow-pulse 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(183, 148, 246, 0.8))
+          drop-shadow(0 0 40px rgba(138, 43, 226, 0.6));
+  /* Mystical font stack */
+  font-family: 'Creepster', 'Cinzel Decorative', cursive, "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji";
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.crystal-ball-emoji {
+  font-size: 3.5rem;
+  display: inline-block;
+  animation: float-ball 3s ease-in-out infinite;
+}
+
+.pumpkin-emoji {
+  font-size: 1.3rem;
+  display: inline-block;
+}
+
+@keyframes float-ball {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    filter:
+      drop-shadow(0 0 20px rgba(183, 148, 246, 0.8))
+      drop-shadow(0 0 40px rgba(138, 43, 226, 0.6))
+      drop-shadow(0 0 60px rgba(138, 43, 226, 0.4));
+  }
+  50% {
+    filter:
+      drop-shadow(0 0 30px rgba(183, 148, 246, 1))
+      drop-shadow(0 0 60px rgba(138, 43, 226, 0.8))
+      drop-shadow(0 0 80px rgba(138, 43, 226, 0.6));
+  }
 }
 
 @keyframes shimmer {
