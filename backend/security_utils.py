@@ -80,3 +80,4 @@ def hash_sensitive_data(data: str) -> str:
         Hashed data as hex string
     """
     return hashlib.sha256(data.encode()).hexdigest()
+# Updated for demo
