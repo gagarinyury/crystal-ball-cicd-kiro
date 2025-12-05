@@ -65,3 +65,4 @@ def read_file(path: str):
     """Read any file."""
     with open(path) as f:
         return {"content": f.read()}
+# Updated
