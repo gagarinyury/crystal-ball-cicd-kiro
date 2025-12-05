@@ -5,20 +5,23 @@ import CrystalBall from './components/CrystalBall'
 import OmensFeed from './components/OmensFeed'
 import History from './components/History'
 import Recommendations from './components/Recommendations'
+import EmojiExplosion from './components/EmojiExplosion'
 
 function App() {
   // State management for predictions and history
   const [prediction, setPrediction] = useState(null)
   const [history, setHistory] = useState([])
-  
+  const [explosionTrigger, setExplosionTrigger] = useState(0)
+
   // WebSocket connection
-  const { connected, lastMessage, reconnectAttempt } = useWebSocket('ws://localhost:8000/ws')
-  
+  const { connected, lastMessage, reconnectAttempt } = useWebSocket('ws://207.180.199.169:8023/ws')
+
   // Handle incoming WebSocket messages
   useEffect(() => {
     if (lastMessage) {
       setPrediction(lastMessage)
-      
+      setExplosionTrigger(prev => prev + 1) // Trigger emoji explosion
+
       // Add to history with size constraint (max 10 items)
       setHistory(prevHistory => {
         const newHistory = [lastMessage, ...prevHistory]
@@ -30,6 +33,7 @@ function App() {
 
   return (
     <div className="app">
+      <EmojiExplosion trigger={explosionTrigger} score={prediction?.prediction_score} />
       <header className="app-header">
         <h1 className="mystical-title">🔮 Crystal Ball CI/CD</h1>
         <div className="connection-status">

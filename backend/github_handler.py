@@ -190,13 +190,13 @@ class GitHubHandler:
         
         for attempt in range(max_retries):
             try:
-                async with httpx.AsyncClient() as client:
+                async with httpx.AsyncClient(follow_redirects=True) as client:
                     # Request diff in plain text format
                     headers = {
                         **self.headers,
                         'Accept': 'application/vnd.github.v3.diff'
                     }
-                    
+
                     logger.info(f"Fetching PR diff (attempt {attempt + 1}/{max_retries})")
                     response = await client.get(
                         diff_url,

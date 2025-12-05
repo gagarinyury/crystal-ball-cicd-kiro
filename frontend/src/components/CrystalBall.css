@@ -26,7 +26,7 @@
   }
 }
 
-/* Orb with radial gradient background */
+/* Glass orb - transparent with refraction effect */
 .orb {
   position: relative;
   width: 200px;
@@ -35,39 +35,87 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 0 40px rgba(138, 43, 226, 0.6);
-  overflow: hidden;
+  background: radial-gradient(circle at 30% 30%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 20%,
+    rgba(100, 100, 150, 0.1) 40%,
+    rgba(50, 50, 100, 0.2) 100%);
+  box-shadow:
+    0 0 60px rgba(138, 43, 226, 0.4),
+    inset 0 0 60px rgba(255, 255, 255, 0.1),
+    inset 20px -20px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow: visible;
   transition: all 0.5s ease;
+  backdrop-filter: blur(2px);
 }
 
-/* Color coding based on score */
+/* Glass highlight - top reflection */
+.orb::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 30%;
+  height: 20%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.6) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Bottom reflection */
+.orb::after {
+  content: '';
+  position: absolute;
+  bottom: 15%;
+  right: 20%;
+  width: 15%;
+  height: 10%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Color glow based on score */
 .orb.green {
-  background: radial-gradient(circle at 30% 30%, #90EE90, #228B22, #0a3d0a);
-  box-shadow: 0 0 40px rgba(144, 238, 144, 0.6), 0 0 80px rgba(144, 238, 144, 0.3);
+  box-shadow:
+    0 0 80px rgba(144, 238, 144, 0.6),
+    0 0 120px rgba(144, 238, 144, 0.3),
+    inset 0 0 60px rgba(144, 238, 144, 0.2),
+    inset 20px -20px 60px rgba(0, 0, 0, 0.2);
 }
 
 .orb.yellow {
-  background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500, #8B6914);
-  box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), 0 0 80px rgba(255, 215, 0, 0.3);
+  box-shadow:
+    0 0 80px rgba(255, 215, 0, 0.6),
+    0 0 120px rgba(255, 215, 0, 0.3),
+    inset 0 0 60px rgba(255, 215, 0, 0.2),
+    inset 20px -20px 60px rgba(0, 0, 0, 0.2);
 }
 
 .orb.red {
-  background: radial-gradient(circle at 30% 30%, #FF6B6B, #DC143C, #8B0000);
-  box-shadow: 0 0 40px rgba(255, 107, 107, 0.6), 0 0 80px rgba(255, 107, 107, 0.3);
+  box-shadow:
+    0 0 80px rgba(255, 107, 107, 0.6),
+    0 0 120px rgba(255, 107, 107, 0.3),
+    inset 0 0 60px rgba(255, 107, 107, 0.2),
+    inset 20px -20px 60px rgba(0, 0, 0, 0.2);
 }
 
 .orb.neutral {
-  background: radial-gradient(circle at 30% 30%, #9370DB, #6A5ACD, #483D8B);
-  box-shadow: 0 0 40px rgba(138, 43, 226, 0.6), 0 0 80px rgba(138, 43, 226, 0.3);
+  box-shadow:
+    0 0 60px rgba(138, 43, 226, 0.4),
+    0 0 100px rgba(138, 43, 226, 0.2),
+    inset 0 0 60px rgba(138, 43, 226, 0.1),
+    inset 20px -20px 60px rgba(0, 0, 0, 0.2);
 }
 
-/* Swirling mist animation */
+/* Swirling mist animation inside */
 .mist {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
   animation: swirl 8s linear infinite;
 }
 
@@ -86,15 +134,340 @@
   }
 }
 
-/* Score display */
+/* Ghost floating inside when no score */
+.ghost {
+  position: relative;
+  z-index: 10;
+  font-size: 8rem;
+  animation: ghostFloat 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.8));
+}
+
+@keyframes ghostFloat {
+  0% {
+    transform: translateY(0px) translateX(0px) rotate(-5deg) scale(1);
+    opacity: 0.9;
+  }
+  15% {
+    transform: translateY(-15px) translateX(10px) rotate(5deg) scale(1.1);
+    opacity: 0.7;
+  }
+  30% {
+    transform: translateY(5px) translateX(-5px) rotate(-3deg) scale(0.9);
+    opacity: 0.3;
+  }
+  45% {
+    transform: translateY(-5px) translateX(-10px) rotate(3deg) scale(0.8);
+    opacity: 0.05;
+  }
+  60% {
+    transform: translateY(10px) translateX(5px) rotate(-2deg) scale(0.9);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translateY(-10px) translateX(-5px) rotate(4deg) scale(1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(-5deg) scale(1);
+    opacity: 0.9;
+  }
+}
+
+/* Flying ghosts when score is shown */
+.flying-ghosts {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 50%;
+  mask-image: radial-gradient(circle, white 40%, transparent 70%);
+  -webkit-mask-image: radial-gradient(circle, white 40%, transparent 70%);
+}
+
+.flying-ghost {
+  position: absolute;
+  font-size: 3rem;
+  opacity: 0;
+  filter: blur(1px) drop-shadow(0 0 5px rgba(255, 255, 255, 0.5));
+}
+
+.fg-1 {
+  left: 20%;
+  animation: flyUp1 4s ease-in-out infinite;
+}
+
+.fg-2 {
+  left: 60%;
+  animation: flyUp2 5s ease-in-out infinite 1s;
+}
+
+.fg-3 {
+  left: 40%;
+  animation: flyUp3 3.5s ease-in-out infinite 2s;
+}
+
+.fg-4 {
+  left: 75%;
+  animation: flyUp4 4.5s ease-in-out infinite 0.5s;
+}
+
+.fg-5 {
+  left: 10%;
+  animation: flyUp5 6s ease-in-out infinite 3s;
+}
+
+@keyframes flyUp1 {
+  0% {
+    bottom: -20%;
+    left: 20%;
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  10% {
+    opacity: 0.8;
+    transform: scale(1) rotate(-15deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8) rotate(10deg);
+  }
+  90% {
+    opacity: 0.3;
+    transform: scale(0.5) rotate(-5deg);
+  }
+  100% {
+    bottom: 120%;
+    left: 35%;
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+}
+
+@keyframes flyUp2 {
+  0% {
+    bottom: -20%;
+    left: 60%;
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  10% {
+    opacity: 0.7;
+    transform: scale(0.9) rotate(20deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.7) rotate(-15deg);
+  }
+  90% {
+    opacity: 0.2;
+    transform: scale(0.4) rotate(10deg);
+  }
+  100% {
+    bottom: 120%;
+    left: 40%;
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+}
+
+@keyframes flyUp3 {
+  0% {
+    bottom: -20%;
+    left: 40%;
+    opacity: 0;
+    transform: scale(0.6) rotate(0deg);
+  }
+  10% {
+    opacity: 0.9;
+    transform: scale(1.1) rotate(-25deg);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(0.9) rotate(20deg);
+  }
+  90% {
+    opacity: 0.3;
+    transform: scale(0.5) rotate(-10deg);
+  }
+  100% {
+    bottom: 120%;
+    left: 70%;
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+}
+
+@keyframes flyUp4 {
+  0% {
+    bottom: -20%;
+    left: 75%;
+    opacity: 0;
+    transform: scale(0.5) rotate(0deg);
+  }
+  10% {
+    opacity: 0.6;
+    transform: scale(0.8) rotate(30deg);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.7) rotate(-20deg);
+  }
+  90% {
+    opacity: 0.2;
+    transform: scale(0.4) rotate(15deg);
+  }
+  100% {
+    bottom: 120%;
+    left: 50%;
+    opacity: 0;
+    transform: scale(0.2) rotate(0deg);
+  }
+}
+
+@keyframes flyUp5 {
+  0% {
+    bottom: -20%;
+    left: 10%;
+    opacity: 0;
+    transform: scale(0.4) rotate(0deg);
+  }
+  10% {
+    opacity: 0.8;
+    transform: scale(1) rotate(-35deg);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(0.8) rotate(25deg);
+  }
+  90% {
+    opacity: 0.3;
+    transform: scale(0.5) rotate(-15deg);
+  }
+  100% {
+    bottom: 120%;
+    left: 55%;
+    opacity: 0;
+    transform: scale(0.3) rotate(0deg);
+  }
+}
+
+/* Lightning effects inside orb */
+.lightning {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.lightning::before {
+  content: '⚡';
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0;
+  animation: lightningStrike 2s infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 100, 1));
+}
+
+.lightning::after {
+  content: '⚡';
+  position: absolute;
+  font-size: 1rem;
+  opacity: 0;
+  animation: lightningStrike 2.5s infinite 0.5s;
+  filter: drop-shadow(0 0 8px rgba(200, 200, 255, 1));
+}
+
+.lightning-2::before {
+  animation-delay: 1s;
+  font-size: 1.2rem;
+}
+
+.lightning-2::after {
+  animation-delay: 1.5s;
+  font-size: 0.8rem;
+}
+
+@keyframes lightningStrike {
+  0%, 100% {
+    opacity: 0;
+    top: 50%;
+    left: 50%;
+  }
+  5% {
+    opacity: 1;
+    top: 20%;
+    left: 30%;
+  }
+  10% {
+    opacity: 0;
+    top: 60%;
+    left: 70%;
+  }
+  15% {
+    opacity: 1;
+    top: 40%;
+    left: 20%;
+  }
+  20% {
+    opacity: 0;
+  }
+}
+
+/* Score display - floating inside the sphere with blur effect */
 .score {
   position: relative;
   z-index: 10;
-  font-size: 3rem;
+  font-size: 3.5rem;
   font-weight: bold;
-  color: white;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.8), 0 0 20px rgba(255, 255, 255, 0.5);
   font-family: 'Georgia', serif;
+  background: linear-gradient(180deg, #fff 0%, #ccc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: blur(1.5px)
+          drop-shadow(0 0 15px rgba(255, 255, 255, 0.9))
+          drop-shadow(0 0 30px rgba(138, 43, 226, 0.8));
+  animation: innerFloat 4s ease-in-out infinite;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+}
+
+/* Score colors */
+.orb.green .score {
+  background: linear-gradient(180deg, #90EE90 0%, #228B22 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(144, 238, 144, 0.9))
+          drop-shadow(0 0 30px rgba(144, 238, 144, 0.5));
+}
+
+.orb.yellow .score {
+  background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.9))
+          drop-shadow(0 0 30px rgba(255, 215, 0, 0.5));
+}
+
+.orb.red .score {
+  background: linear-gradient(180deg, #FF6B6B 0%, #DC143C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: drop-shadow(0 0 15px rgba(255, 107, 107, 0.9))
+          drop-shadow(0 0 30px rgba(255, 107, 107, 0.5));
+}
+
+/* Inner floating animation for score */
+@keyframes innerFloat {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-5px) scale(1.02);
+  }
 }
 
 /* Gazing animation - pulse and glow effects */
@@ -109,20 +482,38 @@
   }
   25% {
     transform: scale(1.05);
-    filter: brightness(1.3);
+    filter: brightness(1.2);
   }
   50% {
     transform: scale(1.1);
-    filter: brightness(1.5);
+    filter: brightness(1.4);
   }
   75% {
     transform: scale(1.05);
-    filter: brightness(1.3);
+    filter: brightness(1.2);
   }
 }
 
 .crystal-ball.gazing .mist {
   animation: swirl 2s linear, glow 2s ease-in-out;
+}
+
+.crystal-ball.gazing .score {
+  animation: scoreReveal 2s ease-out;
+}
+
+@keyframes scoreReveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
 @keyframes glow {
@@ -134,18 +525,23 @@
   }
 }
 
-/* Mystical message */
-.mystical-message {
-  max-width: 500px;
-  text-align: center;
-  font-size: 1.2rem;
-  color: #E6E6FA;
-  font-style: italic;
+/* Curved text under the ball */
+.curved-text-container {
+  width: 100%;
+  max-width: 400px;
+  margin-top: -60px;
+}
+
+.curved-text-svg {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.curved-text {
+  font-size: 32px;
   font-family: 'Georgia', serif;
-  line-height: 1.6;
-  text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-  padding: 1rem;
-  background: rgba(75, 0, 130, 0.2);
-  border-radius: 10px;
-  border: 1px solid rgba(138, 43, 226, 0.3);
+  font-style: italic;
+  fill: #E6E6FA;
+  filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.8));
 }

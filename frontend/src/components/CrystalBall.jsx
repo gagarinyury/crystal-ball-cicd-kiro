@@ -29,13 +29,37 @@ function CrystalBall({ prediction }) {
       <div className={`crystal-ball ${isGazing ? 'gazing' : ''}`}>
         <div className={`orb ${scoreColor}`}>
           <div className="mist"></div>
-          <div className="score">
-            {score !== null ? `${score}%` : '?'}
-          </div>
+          <div className="lightning"></div>
+          <div className="lightning lightning-2"></div>
+          {score === null ? (
+            <div className="ghost">👻</div>
+          ) : (
+            <>
+              <div className="flying-ghosts">
+                <span className="flying-ghost fg-1">👻</span>
+                <span className="flying-ghost fg-2">👻</span>
+                <span className="flying-ghost fg-3">👻</span>
+                <span className="flying-ghost fg-4">👻</span>
+                <span className="flying-ghost fg-5">👻</span>
+              </div>
+              <div className="score">
+                {score}%
+              </div>
+            </>
+          )}
         </div>
       </div>
-      <div className="mystical-message">
-        {message}
+      <div className="curved-text-container">
+        <svg viewBox="0 0 300 50" className="curved-text-svg">
+          <defs>
+            <path id="curve" d="M 10,10 Q 150,60 290,10" fill="transparent" />
+          </defs>
+          <text className="curved-text">
+            <textPath href="#curve" startOffset="50%" textAnchor="middle">
+              {message.length > 60 ? message.slice(0, 60) + '...' : message}
+            </textPath>
+          </text>
+        </svg>
       </div>
     </div>
   )

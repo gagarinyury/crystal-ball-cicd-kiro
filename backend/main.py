@@ -70,8 +70,8 @@ for handler in logging.root.handlers:
 logger = logging.getLogger(__name__)
 
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (override system env vars with .env file)
+load_dotenv(override=True)
 
 # Validate required environment variables
 REQUIRED_ENV_VARS = {
@@ -305,25 +305,41 @@ async def websocket_endpoint(websocket: WebSocket):
 async def health_check():
     """
     Health check endpoint with system metrics.
-    
+
     Returns:
         - status: "alive"
         - accuracy_rate: Overall prediction accuracy percentage
         - predictions_made: Total number of predictions
         - active_connections: Number of active WebSocket connections
-    
+
     Validates: Requirements 8.7, 10.5
     """
     accuracy_rate = prediction_engine.get_accuracy_rate()
     predictions_made = len(prediction_engine.history)
     active_connections = websocket_manager.get_connection_count()
-    
+
     return {
         "status": "alive",
         "accuracy_rate": round(accuracy_rate, 2),
         "predictions_made": predictions_made,
         "active_connections": active_connections
     }
+
+
+@app.post("/test/send-prediction")
+async def send_test_prediction(request: Request):
+    """
+    TEST ENDPOINT: Send a test prediction to all WebSocket clients.
+    Useful for testing the frontend without needing a real PR.
+    """
+    try:
+        payload = await request.json()
+        logger.info(f"Sending test prediction to {websocket_manager.get_connection_count()} clients")
+        await websocket_manager.broadcast(payload)
+        return {"status": "success", "clients_notified": websocket_manager.get_connection_count()}
+    except Exception as e:
+        logger.error(f"Failed to send test prediction: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 # ============================================================================

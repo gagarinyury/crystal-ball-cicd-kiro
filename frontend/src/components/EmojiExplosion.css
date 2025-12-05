@@ -1,0 +1,39 @@
+.emoji-explosion {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.emoji-particle {
+  position: absolute;
+  font-size: var(--size);
+  left: var(--start-x);
+  top: var(--start-y);
+  animation: flyToCenter var(--duration) ease-out var(--delay) forwards;
+  opacity: 0;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+@keyframes flyToCenter {
+  0% {
+    left: var(--start-x);
+    top: var(--start-y);
+    opacity: 1;
+    transform: scale(0.5) rotate(0deg);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.2) rotate(var(--rotation));
+  }
+  100% {
+    left: var(--end-x);
+    top: var(--end-y);
+    opacity: 0;
+    transform: scale(0) rotate(var(--rotation));
+  }
+}

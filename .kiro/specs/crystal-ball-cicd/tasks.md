@@ -15,7 +15,7 @@
     - Define GitHub webhook payload model for validation
     - _Requirements: 11.1, 11.5_
 
-  - [ ]* 2.2 Write property test for Prediction serialization round-trip
+  - [-] 2.2 Write property test for Prediction serialization round-trip
     - **Property 44: Prediction Serialization Round-Trip**
     - **Validates: Requirements 11.5**
 
@@ -45,15 +45,15 @@
     - Handle API errors gracefully
     - _Requirements: 1.4_
 
-  - [ ]* 3.5 Write property test for webhook signature validation
+  - [ ] 3.5 Write property test for webhook signature validation
     - **Property 28: Webhook Signature Validation**
     - **Validates: Requirements 7.1**
 
-  - [ ]* 3.6 Write property test for invalid signature rejection
+  - [ ] 3.6 Write property test for invalid signature rejection
     - **Property 29: Invalid Signature Rejection**
     - **Validates: Requirements 7.2**
 
-  - [ ]* 3.7 Write property test for diff parsing completeness
+  - [ ] 3.7 Write property test for diff parsing completeness
     - **Property 2: Diff Parsing Completeness**
     - **Validates: Requirements 1.3**
 
@@ -81,15 +81,15 @@
     - Handle rate limiting with queueing
     - _Requirements: 8.3, 8.4, 11.4_
 
-  - [ ]* 4.5 Write property test for prediction score range
+  - [ ] 4.5 Write property test for prediction score range
     - **Property 6: Prediction Score Range**
     - **Validates: Requirements 2.2**
 
-  - [ ]* 4.6 Write property test for omen classification correctness
+  - [ ] 4.6 Write property test for omen classification correctness
     - **Property 8: Omen Classification Correctness**
     - **Validates: Requirements 2.4**
 
-  - [ ]* 4.7 Write property test for omen structure completeness
+  - [ ] 4.7 Write property test for omen structure completeness
     - **Property 7: Omen Structure Completeness**
     - **Validates: Requirements 2.3**
 
@@ -112,15 +112,15 @@
     - Recalculate prediction score based on enhanced severities
     - _Requirements: 3.4, 3.5_
 
-  - [ ]* 5.4 Write property test for accuracy calculation correctness
+  - [ ] 5.4 Write property test for accuracy calculation correctness
     - **Property 11: Accuracy Calculation Correctness**
     - **Validates: Requirements 3.3**
 
-  - [ ]* 5.5 Write property test for historical severity enhancement
+  - [ ] 5.5 Write property test for historical severity enhancement
     - **Property 12: Historical Severity Enhancement**
     - **Validates: Requirements 3.4**
 
-  - [ ]* 5.6 Write property test for historical annotation
+  - [ ] 5.6 Write property test for historical annotation
     - **Property 13: Historical Annotation**
     - **Validates: Requirements 3.5**
 
@@ -137,7 +137,7 @@
     - Remove failed connections and continue broadcasting
     - _Requirements: 5.2, 8.5_
 
-  - [ ]* 6.3 Write property test for broadcast to all clients
+  - [ ] 6.3 Write property test for broadcast to all clients
     - **Property 19: Broadcast to All Clients**
     - **Validates: Requirements 5.2**
 
@@ -176,11 +176,11 @@
     - Log all errors with full context
     - _Requirements: 8.6, 9.5_
 
-  - [ ]* 7.6 Write property test for health endpoint response
+  - [ ] 7.6 Write property test for health endpoint response
     - **Property 38: Health Endpoint Response**
     - **Validates: Requirements 8.7**
 
-  - [ ]* 7.7 Write property test for sensitive data protection
+  - [ ] 7.7 Write property test for sensitive data protection
     - **Property 39: Sensitive Data Protection**
     - **Validates: Requirements 9.5**
 
@@ -213,7 +213,7 @@
     - Reset backoff on successful connection
     - _Requirements: 5.4_
 
-  - [ ]* 10.3 Write property test for reconnection backoff sequence
+  - [ ] 10.3 Write property test for reconnection backoff sequence
     - **Property 21: Client Reconnection Backoff**
     - **Validates: Requirements 5.4**
 
@@ -242,7 +242,7 @@
     - Swirling mist animation
     - _Requirements: 4.1, 4.2_
 
-  - [ ]* 11.5 Write property test for score color coding
+  - [ ] 11.5 Write property test for score color coding
     - **Property 15: Score Color Coding**
     - **Validates: Requirements 4.3**
 
@@ -265,7 +265,7 @@
     - Card hover effects
     - _Requirements: 4.4_
 
-  - [ ]* 12.4 Write property test for omen icon mapping
+  - [ ] 12.4 Write property test for omen icon mapping
     - **Property 16: Omen Icon Mapping**
     - **Validates: Requirements 4.4**
 
@@ -286,7 +286,7 @@
     - Show list of actionable suggestions
     - _Requirements: 4.6_
 
-  - [ ]* 13.4 Write property test for history size constraint
+  - [ ] 13.4 Write property test for history size constraint
     - **Property 25: History Size Constraint**
     - **Validates: Requirements 6.2**
 
@@ -396,11 +396,11 @@
     - Return boolean status
     - _Requirements: 16.1_
 
-  - [ ]* 18.6 Write property test for database round-trip
+  - [ ] 18.6 Write property test for database round-trip
     - **Property 45: Database Prediction Round-Trip**
     - **Validates: Requirements 13.2**
 
-  - [ ]* 18.7 Write property test for historical data ordering
+  - [ ] 18.7 Write property test for historical data ordering
     - **Property 46: Historical Data Ordering**
     - **Validates: Requirements 13.4**
 
@@ -430,15 +430,15 @@
     - Log rate limit events with IP and timestamp
     - _Requirements: 14.2, 14.4, 14.5_
 
-  - [ ]* 19.5 Write property test for rate limiter tracking
+  - [ ] 19.5 Write property test for rate limiter tracking
     - **Property 47: Rate Limiter Request Tracking**
     - **Validates: Requirements 14.1**
 
-  - [ ]* 19.6 Write property test for rate limited response headers
+  - [ ] 19.6 Write property test for rate limited response headers
     - **Property 48: Rate Limited Response Headers**
     - **Validates: Requirements 14.4**
 
-  - [ ]* 19.7 Write property test for rate limit logging
+  - [ ] 19.7 Write property test for rate limit logging
     - **Property 49: Rate Limit Logging**
     - **Validates: Requirements 14.5**
 
