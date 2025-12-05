@@ -49,17 +49,8 @@ function CrystalBall({ prediction }) {
           )}
         </div>
       </div>
-      <div className="curved-text-container">
-        <svg viewBox="0 0 300 50" className="curved-text-svg">
-          <defs>
-            <path id="curve" d="M 10,10 Q 150,60 290,10" fill="transparent" />
-          </defs>
-          <text className="curved-text">
-            <textPath href="#curve" startOffset="50%" textAnchor="middle">
-              {message.length > 60 ? message.slice(0, 60) + '...' : message}
-            </textPath>
-          </text>
-        </svg>
+      <div className="mystical-message">
+        <p className="message-text">{message}</p>
       </div>
     </div>
   )
